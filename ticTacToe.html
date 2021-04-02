@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title> Buttons </title>
+    <!-- css --
+    <link rel="stylesheet" type="text/css" href="mystyle.css">  -> href="whateverTheFileIsCalled.css"
+    -->
+    <style>
+        body {
+            background-color: black;
+            margin-top: 100px 100px 100px 100px; /* clockwise starting at top*/
+            padding: 25px 25px 25px 25px;
+            max-height: 1000px;
+            max-width: 1000px;
+        }
+        /*  
+
+background-image: url("bgdesert.jpg");
+background-image: url("gradient_bg.png");
+background-repeat: repeat-x; or "no-repeat"
+background-position: right top;
+background-attachment: fixed; or "scroll"
+
+background: #ffffff url("img_tree.png") no-repeat right top;
+
+When using the shorthand property the order of the property values is:
+
+background-color
+background-image
+background-repeat
+background-attachment
+background-position
+
+        */
+        .buttonContainer {
+            height: 500px;
+            /*max-height: 500px;*/
+            justify-self: center;
+            overflow: auto;
+            margin:auto;
+            }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        .buttonContainer > .buttonClass {
+            width: 33.33%;
+            height: 33.33%;
+            padding: 10px;
+            font-size: 50px;
+            color: var(--color);
+            background-color:dimgray;
+            float: left;
+            justify-self: center;
+            justify-items: center;
+        }
+
+        #btn1 {
+        }
+
+        header {
+            font-size: 30px;
+            width: auto;
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<!-- html -->
+<body>
+    <header>Tic Tac Toe!!!</header>
+    <div id='btns' class='buttonContainer'>
+        <button id='btn1' class='buttonClass'></button>
+        <button id='btn2' class='buttonClass'></button>
+        <button id='btn3' class='buttonClass'></button>
+        <button id='btn4' class='buttonClass'></button>
+        <button id='btn5' class='buttonClass'></button>
+        <button id='btn6' class='buttonClass'></button>
+        <button id='btn7' class='buttonClass'></button>
+        <button id='btn8' class='buttonClass'></button>
+        <button id='btn9' class='buttonClass'></button>
+    </div>
+<!-- javascript -->
+    <script>
+        // global vars
+        let turn = 0;
+        let arr = [
+            ['btn1', 'btn2', 'btn3'],
+            ['btn4', 'btn5', 'btn6'],
+            ['btn7', 'btn8', 'btn9']
+        ];
+
+        function clearArr() {
+            for (let k = 1; k < 10; k++) {
+                let btn = 'btn' + k;
+                document.getElementById(btn).innerHTML = '';
+            }
+        }
+
+        function checkWinner() {
+            // function vars
+            var tieCheck = [['', '', ''], ['', '', ''], ['', '', '']];
+
+            for (let i = 0; i < 3; i++) {
+                // temp vars
+                var checkHor = ['', '', ''];
+                var checkVert = ['', '', ''];
+
+                for (let j = 0; j < 3; j++) {
+                    checkHor[j] = document.getElementById(arr[i][j]).innerHTML;
+                    checkVert[j] = document.getElementById(arr[j][i]).innerHTML;
+                    tieCheck[i][j] = document.getElementById(arr[i][j]).innerHTML;
+                }
+                // check if X wins
+                // check horizontal
+                if (checkHor[0] == 'X' && checkHor[1] == 'X' && checkHor[2] == 'X') {
+                    alert("X is a Winner!");
+                    clearArr();
+                }
+                // check vertical
+                if (checkVert[0] == 'X' && checkVert[1] == 'X' && checkVert[2] == 'X') {
+                    alert("X is a Winner!");
+                    clearArr();
+                }
+                // check if O wins
+                // check Horizontal
+                if (checkHor[0] == 'O' && checkHor[1] == 'O' && checkHor[2] == 'O') {
+                    alert("O is a Winner!");
+                    clearArr();
+                }
+                // check vertical
+                if (checkVert[0] == 'O' && checkVert[1] == 'O' && checkVert[2] == 'O') {
+                    alert("O is a Winner!");
+                    clearArr();
+                }
+                //                alert('checkVert = {' + checkVert + '} checkHor = {' + checkHor + '}');
+            }
+            // check if X wins diag
+            if (document.getElementById('btn1').innerHTML == 'X' &&
+                document.getElementById('btn5').innerHTML == 'X' &&
+                document.getElementById('btn9').innerHTML == 'X') {
+                alert("X is a Winner!");
+                clearArr();
+            }
+            if (document.getElementById('btn3').innerHTML == 'X' &&
+                document.getElementById('btn5').innerHTML == 'X' &&
+                document.getElementById('btn7').innerHTML == 'X') {
+                alert("X is a Winner!");
+                clearArr();
+            }
+            // check if O wins diag
+            if (document.getElementById('btn1').innerHTML == 'O' &&
+                document.getElementById('btn5').innerHTML == 'O' &&
+                document.getElementById('btn9').innerHTML == 'O') {
+                alert("O is a Winner!");
+                clearArr();
+            }
+            if (document.getElementById('btn3').innerHTML == 'O' &&
+                document.getElementById('btn5').innerHTML == 'O' &&
+                document.getElementById('btn7').innerHTML == 'O') {
+                alert("O is a Winner!");
+                clearArr();
+            }
+            // check if its a tie
+            for (var i = 0; i < 3; i++) {
+                for (var j = 0; j < 3; j++) {
+                    if (tieCheck[i][j] != 'X' && tieCheck[i][j] != 'O') {
+//                        alert("tieCheck");
+                        return;
+                    }
+                }
+            }
+            alert("Its a Tie...");
+            clearArr();
+        }
+
+        function action(e) {
+            /* Older IE browsers have a srcElement property,
+            but other browsers have a 'target' property;
+            Set btn to whichever exists. */
+            var btn = e.target || e.srcElement;
+            // check valid placement
+            if (btn.innerHTML != '') { alert("Invalid placement"); return; }
+            // check whos turn
+            if (turn % 2 == 0) {
+                turn++;
+                document.getElementById(btn.id).innerHTML = "X";
+                document.getElementById(btn.id).style.setProperty('--color', 'blue');
+            } else {
+                turn--;
+                document.getElementById(btn.id).innerHTML = "O";
+                document.getElementById(btn.id).style.setProperty('--color', 'red');
+            }
+            // check winner
+            checkWinner();
+        }
+
+        /* Set each button to call action(e) when clicked */
+        document.getElementById('btn1').onclick = action;
+        document.getElementById('btn2').onclick = action;
+        document.getElementById('btn3').onclick = action;
+        document.getElementById('btn4').onclick = action;
+
+        /*      Add a click event listener that calls action(e) when clicked */
+        document.getElementById('btn5').addEventListener('click', action);
+        document.getElementById('btn6').addEventListener('click', action);
+        document.getElementById('btn7').addEventListener('click', action);
+        document.getElementById('btn8').addEventListener('click', action);
+        document.getElementById('btn9').addEventListener('click', action);
+
+        /*        Indiviual funtions here
+        document.getElementById('btn9').onclick = function () {
+            document.getElementById('btn9').innerHTML++;
+        };
+        */
+    </script>
+
+</body>
+</html>
